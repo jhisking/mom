@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.claude
+
+# 비밀/참고 파일: 절대 올리지 않는다
+api keys.txt
+sqlpassword.txt
+*.txt
+1.png
+KakaoTalk_*.jpg
