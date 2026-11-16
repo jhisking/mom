@@ -9,17 +9,19 @@ export default function Login() {
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
     if (error) setMsg('이메일 또는 비밀번호가 맞지 않습니다.')
   }
   const input = 'h-12 rounded-lg border px-3 text-base'
+  // 폰 키보드가 첫 글자를 대문자로 바꾸거나 자동 교정하지 않게 한다
+  const keys = { autoCapitalize: 'none', autoCorrect: 'off', spellCheck: false } as const
   return (
     <form onSubmit={login} className="mx-auto mt-24 flex max-w-sm flex-col gap-3 px-4">
       <h1 className="text-2xl font-bold">🍼 수유 기록지</h1>
       <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-        autoComplete="username" placeholder="이메일" className={input} />
+        autoComplete="username" placeholder="이메일" className={input} {...keys} />
       <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
-        autoComplete="current-password" placeholder="비밀번호" className={input} />
+        autoComplete="current-password" placeholder="비밀번호" className={input} {...keys} />
       <button className="h-12 rounded-lg bg-pink-500 font-semibold text-white">로그인</button>
       {msg && <p className="text-sm text-red-600">{msg}</p>}
     </form>
