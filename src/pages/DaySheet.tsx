@@ -4,6 +4,7 @@ import { useDay } from '../api/useDay'
 import { addRecord } from '../api/records'
 import { careDate, shiftDate, slotHour, slotToDate } from '../lib/careDay'
 import { cellRecords } from '../lib/sheet'
+import { downloadDay, sheetRows } from '../lib/exportSheet'
 import type { BabyRecord, RecordKind } from '../lib/types'
 import CellSheet from '../components/CellSheet'
 import DayTable from '../components/DayTable'
@@ -45,6 +46,8 @@ export default function DaySheet({ babyId, birthDate }: { babyId: string; birthD
   const dplus = birthDate ? Math.round((Date.parse(date) - Date.parse(birthDate)) / 86400000) : null
   const edit = (r: BabyRecord) => setModal({ t: 'rec', kind: r.kind, time: new Date(r.recorded_at), initial: r })
   const cell = modal?.t === 'cell' ? modal : null
+  const exportXlsx = () =>
+    downloadDay(date, sheetRows(date, dplus, weight?.amount ?? null, records)).catch((e) => setMsg(e.message))
 
   return (
     <div className="space-y-3">
@@ -65,6 +68,9 @@ export default function DaySheet({ babyId, birthDate }: { babyId: string; birthD
       </div>
       {(error || msg) && <p className="text-sm text-red-600">{error || msg}</p>}
       <DayTable records={records} onCell={onCell} />
+      <button onClick={exportXlsx} className="h-12 w-full rounded-xl bg-emerald-600 font-semibold text-white">
+        📥 이 날 기록지 엑셀로 다운로드
+      </button>
       {cell && (
         <CellSheet hour={cell.hour} kind={cell.kind} records={cellRecords(records, cell.hour, cell.kind)}
           onEdit={edit} onAdd={() => setModal({ t: 'rec', kind: cell.kind, time: slotTime(cell.hour) })}
