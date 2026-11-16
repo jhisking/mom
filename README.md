@@ -25,5 +25,5 @@ select u.id, b.id from auth.users u, b where u.email in ('mom@example.com', 'dad
 ## 배포
 GitHub Pages + GitHub Actions(`.github/workflows/deploy.yml`). main에 push하면 테스트 → 빌드 → 배포가 자동으로 돈다.
 1. 저장소 Settings → Pages → Source를 **GitHub Actions**로 설정
-2. Settings → Secrets and variables → Actions → **Variables** 탭에 `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` 등록 (공개용 키라 Variables로 충분)
+2. 환경변수는 공개용 값이라 `.env.production`에 커밋되어 있다 (Variables 등록 불필요). service_role 키는 절대 넣지 말 것
 3. 주소: `https://<아이디>.github.io/<저장소>/` (해시 라우터라 새로고침해도 404가 나지 않는다)
